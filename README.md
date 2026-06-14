@@ -1,0 +1,1 @@
+Upload to GitHub Pages and enable Pages from Settings.
