@@ -1,0 +1,11 @@
+{
+  "name": "Arudra Yoga",
+  "short_name": "Arudra",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4b0f16",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

@@ -1,0 +1,41 @@
+name: Deploy static export to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install
+        run: |
+          cd next-site
+          npm ci
+      - name: Optimize images
+        run: |
+          cd next-site
+          npm run optimize-images
+      - name: Inject SITE_URL and set BASE_PATH
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          cd next-site
+          node scripts/inject-site-url.js
+      - name: Build & Export
+        env:
+          BASE_PATH: "/arudra-yoga"
+          SITE_URL: ${{ steps.inject.outputs.SITE_URL || '' }}
+        run: |
+          cd next-site
+          BASE_PATH=/arudra-yoga npm run export
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./next-site/out
